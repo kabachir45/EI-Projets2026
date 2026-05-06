@@ -1,0 +1,26 @@
+.page { max-width: 860px; margin: 0 auto; padding: 88px 24px 48px; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; }
+.headerInfo h1 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); }
+.headerInfo p { color: var(--muted); font-size: 0.88rem; }
+.progressWrap { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 24px; }
+.stepCard { margin-bottom: 0; }
+.stepTitle { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
+.stepNav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+.uploadArea { border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 28px; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 8px; }
+.uploadArea:hover { border-color: var(--primary); }
+.testsList { display: flex; flex-direction: column; gap: 12px; }
+.testItem { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border); }
+.testInfo { display: flex; align-items: center; gap: 14px; }
+.testIcon { font-size: 1.6rem; }
+.testQ h4 { font-weight: 600; font-size: 0.95rem; color: var(--navy); margin-bottom: 14px; }
+.testOpt { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius); cursor: pointer; margin-bottom: 8px; transition: all 0.15s; font-size: 0.88rem; }
+.testOpt:hover { border-color: var(--primary); }
+.testOptSelected { border-color: var(--primary); background: var(--primary-bg); color: var(--primary); font-weight: 600; }
+.testOptLetter { width: 26px; height: 26px; border-radius: 50%; background: var(--border); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+.testOptSelected .testOptLetter { background: var(--primary); color: #fff; }
+.formationsList { display: flex; flex-direction: column; gap: 14px; }
+.formationCard { }
+.formationHeader { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.formationTitle { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--navy); margin-bottom: 4px; }
+.formationActions { display: flex; gap: 10px; padding-top: 12px; border-top: 1px solid var(--border); }
+.emptyState { text-align: center; padding: 48px 24px; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 12px; background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border); }

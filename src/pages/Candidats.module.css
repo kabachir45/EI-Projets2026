@@ -1,0 +1,27 @@
+.page { padding-top: 64px; }
+.sectionWrap { max-width: 1100px; margin: 0 auto; }
+.hero { background: #000B99; padding: 72px 5% 56px; position: relative; overflow: hidden; min-height: 340px; display: flex; align-items: center; }
+.heroBg { position: absolute; inset: 0; background: radial-gradient(ellipse 50% 60% at 70% 50%, rgba(0,19,255,0.3) 0, transparent 70%); }
+.heroContent { position: relative; z-index: 2; max-width: 600px; }
+.heroTag { display: inline-block; background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3); color: #F5A623; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 14px; border-radius: 50px; margin-bottom: 18px; }
+.heroContent h1 { font-family: 'Poppins', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: 14px; }
+.heroContent h1 em { color: #F5A623; font-style: normal; }
+.heroContent p { color: rgba(255,255,255,0.62); font-size: 1rem; line-height: 1.7; }
+.etapesSection { padding: 72px 5%; background: #fff; }
+.etapesGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.etapeCard { text-align: center; padding: 32px 24px; background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border); }
+.etapeNum { font-family: 'Poppins', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--primary); line-height: 1; margin-bottom: 14px; }
+.etapeTitle { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--navy); margin-bottom: 8px; }
+.etapeDesc { color: var(--muted); font-size: 0.88rem; line-height: 1.65; }
+.avantagesSection { padding: 64px 5%; background: var(--bg); }
+.avantCard { display: flex; gap: 16px; align-items: flex-start; }
+.avantIcon { font-size: 1.8rem; flex-shrink: 0; }
+.avantTitle { font-weight: 700; font-size: 0.95rem; color: var(--navy); margin-bottom: 4px; }
+.avantDesc { color: var(--muted); font-size: 0.86rem; line-height: 1.6; }
+.faqSection { padding: 64px 5%; background: #fff; }
+.faqItem { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
+.faqQ { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #fff; border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: var(--text); text-align: left; gap: 12px; }
+.faqQ:hover { background: var(--bg); }
+.faqA { padding: 0 20px 16px; color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+.ctaSection { padding: 64px 5%; background: var(--primary); }
+@media (max-width: 768px) { .etapesGrid { grid-template-columns: 1fr; } }

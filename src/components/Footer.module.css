@@ -1,0 +1,26 @@
+.footer { background: #00073D; padding: 48px 5% 24px; border-top: 1px solid rgba(255,255,255,0.05); }
+.inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; max-width: 1280px; margin: 0 auto 36px; }
+.brand .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.brand .logo img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+.brand .logo span { font-family: 'Poppins', sans-serif; font-weight: 900; color: #fff; font-size: 1rem; }
+.brand .logo em { color: #F5A623; font-style: normal; }
+.brand p { color: rgba(255,255,255,0.4); font-size: 0.83rem; line-height: 1.7; max-width: 260px; }
+.contact { color: rgba(255,255,255,0.3) !important; font-size: 0.78rem !important; margin-top: 10px; }
+.col h4 { color: rgba(255,255,255,0.5); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+.col ul { list-style: none; }
+.col ul li { margin-bottom: 8px; }
+.col ul li button { color: rgba(255,255,255,0.4); background: none; border: none; cursor: pointer; font-size: 0.83rem; padding: 0; transition: color 0.2s; }
+.col ul li button:hover { color: #F5A623; }
+.socials { display: flex; gap: 8px; }
+.social { width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); border: none; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: background 0.2s; }
+.social:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.bottom { max-width: 1280px; margin: 0 auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.bottom p { color: rgba(255,255,255,0.25); font-size: 0.75rem; }
+.legal { display: flex; gap: 16px; }
+.legal button { color: rgba(255,255,255,0.25); background: none; border: none; font-size: 0.75rem; cursor: pointer; }
+.legal button:hover { color: rgba(255,255,255,0.5); }
+@media (max-width: 768px) {
+  .inner { grid-template-columns: 1fr 1fr; }
+  .brand { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) { .inner { grid-template-columns: 1fr; } }

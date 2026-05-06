@@ -1,0 +1,101 @@
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: #0013FF;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  height: 68px;
+}
+.inner {
+  max-width: 1280px; margin: 0 auto;
+  height: 100%; padding: 0 5%;
+  display: flex; align-items: center; gap: 16px;
+}
+
+/* BRAND */
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; flex-shrink: 0; text-decoration: none;
+}
+.logo {
+  width: 48px; height: 48px; border-radius: 10px;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.35);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.brand:hover .logo { transform: scale(1.06); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+
+.brandText { display: flex; flex-direction: column; gap: 1px; }
+.initials { display: flex; align-items: baseline; gap: 1px; line-height: 1; }
+.initialsS { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 1.3rem; color: #fff; }
+.initialsT { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 1.3rem; color: #F5A623; }
+.initialsC { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 1.3rem; color: #fff; }
+.brandSub { font-size: 0.6rem; font-weight: 500; color: rgba(255,255,255,0.45); letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* NAV LINKS */
+.links {
+  display: flex; align-items: center; gap: 2px;
+  list-style: none; margin-left: auto;
+}
+.link {
+  padding: 7px 14px; border-radius: 8px;
+  color: rgba(255,255,255,0.7); font-size: 0.875rem; font-weight: 500;
+  background: none; border: none; cursor: pointer; transition: all 0.2s;
+}
+.link:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.link.active { color: #fff; background: rgba(255,255,255,0.15); font-weight: 700; }
+
+/* ACTIONS */
+.actions {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.userName {
+  color: rgba(255,255,255,0.7); font-size: 0.82rem;
+  max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.spaceBtn {
+  background: rgba(255,255,255,0.15); color: #fff;
+  border: 1px solid rgba(255,255,255,0.2); padding: 7px 14px;
+  border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.spaceBtn:hover { background: rgba(255,255,255,0.25); }
+.logoutBtn {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.15); cursor: pointer; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.logoutBtn:hover { background: rgba(255,50,50,0.3); color: #fff; }
+.loginBtn {
+  background: transparent; color: rgba(255,255,255,0.8);
+  border: 1.5px solid rgba(255,255,255,0.3); padding: 7px 16px;
+  border-radius: 8px; font-size: 0.83rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.loginBtn:hover { border-color: #fff; color: #fff; }
+.registerBtn {
+  background: #fff; color: #0013FF;
+  border: none; padding: 7px 16px;
+  border-radius: 8px; font-size: 0.83rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.registerBtn:hover { background: #e8ecff; }
+
+/* BURGER */
+.burger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 4px; margin-left: auto;
+}
+.burger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; }
+
+@media (max-width: 768px) {
+  .links {
+    position: fixed; top: 68px; left: 0; right: 0;
+    background: #0013FF; flex-direction: column;
+    padding: 12px; gap: 4px; margin: 0;
+    transform: translateY(-110%); transition: transform 0.3s; display: flex;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .links.open { transform: translateY(0); }
+  .link { width: 100%; text-align: left; padding: 10px 14px; }
+  .burger { display: flex; }
+  .userName, .spaceBtn { display: none; }
+  .loginBtn, .registerBtn { font-size: 0.75rem; padding: 6px 10px; }
+}
