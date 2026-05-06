@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useData } from '../context/DataContext';
 import logo from '../assets/logo.jpeg';
 import styles from './Inscription.module.css';
 
 export default function Inscription() {
-  const { register, registerError, setRegisterError } = useAuth();
+  const { register, registerError, setRegisterError, EMAIL_DOMAIN } = useAuth();
+  const { addCandidatFromRegistration, addEntrepriseFromRegistration } = useData();
   const navigate = useNavigate();
   const [role, setRole] = useState('candidat');
   const [form, setForm] = useState({ prenom: '', nom: '', societe: '', email: '', password: '', confirm: '', telephone: '', secteur: '' });
   const [localError, setLocalError] = useState('');
+  const [createdEmail, setCreatedEmail] = useState(null);
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
@@ -18,12 +21,64 @@ export default function Inscription() {
     setLocalError(''); setRegisterError('');
     if (form.password !== form.confirm) { setLocalError('Les mots de passe ne correspondent pas.'); return; }
     if (form.password.length < 6) { setLocalError('Le mot de passe doit faire au moins 6 caractères.'); return; }
-    const ok = register({ ...form, role });
-    if (ok) {
-      if (role === 'candidat') navigate('/espace-candidat');
-      else navigate('/espace-entreprise');
+    const result = register({ ...form, role });
+    if (result) {
+      // Create the profile entry in DataContext
+      if (role === 'candidat') {
+        addCandidatFromRegistration({
+          id: result.numericId,
+          prenom: form.prenom,
+          nom: form.nom,
+          email: form.email,
+          telephone: form.telephone,
+        });
+      } else {
+        addEntrepriseFromRegistration({
+          id: result.numericId,
+          societe: form.societe,
+          secteur: form.secteur,
+          email: form.email,
+          telephone: form.telephone,
+        });
+      }
+      setCreatedEmail(result.platformEmail);
+      setTimeout(() => {
+        if (role === 'candidat') navigate('/espace-candidat');
+        else navigate('/espace-entreprise');
+      }, 3000);
     }
   };
+
+  if (createdEmail) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f7ff', padding: '20px' }}>
+        <div style={{ background: '#fff', borderRadius: 20, padding: '48px 40px', maxWidth: 480, width: '100%', textAlign: 'center', boxShadow: '0 8px 40px rgba(0,19,255,0.1)' }}>
+          <div style={{ fontSize: '3rem', marginBottom: 16 }}>🎉</div>
+          <h2 style={{ fontFamily: 'Poppins', fontWeight: 700, color: '#0013FF', marginBottom: 12 }}>Compte créé !</h2>
+          <p style={{ color: '#555', marginBottom: 20 }}>Votre compte STC a été créé avec succès. Votre adresse email professionnelle sur la plateforme est :</p>
+          <div style={{ background: '#f0f3ff', border: '2px solid #0013FF', borderRadius: 10, padding: '14px 20px', marginBottom: 20 }}>
+            <span style={{ fontFamily: 'monospace', fontSize: '1rem', fontWeight: 700, color: '#0013FF' }}>{createdEmail}</span>
+          </div>
+          <p style={{ fontSize: '0.85rem', color: '#888' }}>Redirection vers votre espace dans quelques secondes…</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Compute preview email
+  const previewEmail = () => {
+    if (role === 'entreprise' && form.societe) {
+      return form.societe.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20) + EMAIL_DOMAIN;
+    }
+    if (role === 'candidat' && (form.prenom || form.nom)) {
+      const p = (form.prenom || '').toLowerCase().replace(/[^a-z]/g, '');
+      const n = (form.nom || '').toLowerCase().replace(/[^a-z]/g, '');
+      if (p || n) return `${p}.${n}${EMAIL_DOMAIN}`;
+    }
+    return null;
+  };
+
+  const emailPreview = previewEmail();
 
   return (
     <div className={styles.page}>
@@ -43,6 +98,12 @@ export default function Inscription() {
                 <span>{s}</span>
               </div>
             ))}
+          </div>
+          <div style={{ marginTop: 24, background: 'rgba(255,255,255,0.1)', borderRadius: 12, padding: '12px 16px' }}>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.78rem', margin: 0 }}>
+              📧 Tous les comptes créés reçoivent une adresse<br />
+              <strong style={{ color: '#F5A623' }}>@sunutrainingcenter.sn</strong>
+            </p>
           </div>
         </div>
       </div>
@@ -97,18 +158,24 @@ export default function Inscription() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email professionnel</label>
-              <input className="form-input" type="email" placeholder="vous@email.com" value={form.email} onChange={e => set('email', e.target.value)} required />
+              <label className="form-label">Email personnel (pour vous connecter)</label>
+              <input className="form-input" type="email" placeholder="vous@email.com" value={form.email} onChange={e => set('email', e.target.value)} required autoComplete="email" />
             </div>
+
+            {emailPreview && (
+              <div style={{ background: '#f0f3ff', border: '1px solid #c7d0ff', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: '0.82rem', color: '#0013FF' }}>
+                📧 Votre email plateforme : <strong>{emailPreview}</strong>
+              </div>
+            )}
 
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Mot de passe</label>
-                <input className="form-input" type="password" placeholder="6 caractères min." value={form.password} onChange={e => set('password', e.target.value)} required />
+                <input className="form-input" type="password" placeholder="6 caractères min." value={form.password} onChange={e => set('password', e.target.value)} required autoComplete="new-password" />
               </div>
               <div className="form-group">
                 <label className="form-label">Confirmer</label>
-                <input className="form-input" type="password" placeholder="••••••••" value={form.confirm} onChange={e => set('confirm', e.target.value)} required />
+                <input className="form-input" type="password" placeholder="••••••••" value={form.confirm} onChange={e => set('confirm', e.target.value)} required autoComplete="new-password" />
               </div>
             </div>
 

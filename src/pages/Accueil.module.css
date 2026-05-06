@@ -223,3 +223,36 @@
   .featGrid { grid-template-columns: 1fr; }
   .heroTitle { font-size: 2rem; }
 }
+
+/* PARTENAIRES */
+.partenairesSection { padding: 72px 0; background: #fff; }
+.partenairesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.partenaireCard {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 16px; border-radius: 16px;
+  border: 1px solid #eef0f7; background: #fafbff;
+  transition: all 0.2s; cursor: default;
+}
+.partenaireCard:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,19,255,0.08); border-color: #c7d0ff; }
+.partenaireLogoBox {
+  width: 100px; height: 72px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px; overflow: hidden; padding: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.partenaireLogoImg {
+  width: 100%; height: 100%; object-fit: contain;
+}
+.partenaireNom { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--dark); margin-bottom: 4px; text-align: center; }
+.partenaireSecteur { font-size: 0.75rem; color: var(--muted); background: #f0f3ff; padding: 3px 10px; border-radius: 20px; }
+
+@media (max-width: 768px) {
+  .partenairesGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .partenairesGrid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}

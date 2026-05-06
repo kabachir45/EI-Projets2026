@@ -5,14 +5,14 @@
 
 // --- USERS (auth simulée) ---
 export const users = [
-  { id: 'u1', email: 'fatou@stc.sn',    password: '1234', role: 'candidat',   nom: 'Fatou Diallo',    candidatId: 1 },
-  { id: 'u2', email: 'moussa@stc.sn',   password: '1234', role: 'candidat',   nom: 'Moussa Sow',      candidatId: 2 },
-  { id: 'u3', email: 'aissatou@stc.sn', password: '1234', role: 'candidat',   nom: 'Aïssatou Ba',     candidatId: 3 },
-  { id: 'u4', email: 'ibrahima@stc.sn', password: '1234', role: 'candidat',   nom: 'Ibrahima Fall',   candidatId: 4 },
-  { id: 'u5', email: 'mariama@stc.sn',  password: '1234', role: 'candidat',   nom: 'Mariama Diop',    candidatId: 5 },
-  { id: 'u6', email: 'orange@stc.sn',   password: '1234', role: 'entreprise', nom: 'Orange Sénégal',  entrepriseId: 2 },
-  { id: 'u7', email: 'concentrix@stc.sn',password:'1234', role: 'entreprise', nom: 'Concentrix',      entrepriseId: 1 },
-  { id: 'u8', email: 'admin@stc.sn',    password: 'admin', role: 'admin',     nom: 'Admin STC' },
+  { id: 'u1', email: 'fatou@sunutrainingcenter.sn',    password: '1234', role: 'candidat',   nom: 'Fatou Diallo',    candidatId: 1 },
+  { id: 'u2', email: 'moussa@sunutrainingcenter.sn',   password: '1234', role: 'candidat',   nom: 'Moussa Sow',      candidatId: 2 },
+  { id: 'u3', email: 'aissatou@sunutrainingcenter.sn', password: '1234', role: 'candidat',   nom: 'Aïssatou Ba',     candidatId: 3 },
+  { id: 'u4', email: 'ibrahima@sunutrainingcenter.sn', password: '1234', role: 'candidat',   nom: 'Ibrahima Fall',   candidatId: 4 },
+  { id: 'u5', email: 'mariama@sunutrainingcenter.sn',  password: '1234', role: 'candidat',   nom: 'Mariama Diop',    candidatId: 5 },
+  { id: 'u6', email: 'orange@sunutrainingcenter.sn',   password: '1234', role: 'entreprise', nom: 'Orange Sénégal',  entrepriseId: 2 },
+  { id: 'u7', email: 'concentrix@sunutrainingcenter.sn',password:'1234', role: 'entreprise', nom: 'Concentrix',      entrepriseId: 1 },
+  { id: 'u8', email: 'admin@sunutrainingcenter.sn',    password: 'admin', role: 'admin',     nom: 'Admin STC' },
 ];
 
 // --- CANDIDATS ---

@@ -3,6 +3,8 @@ import { users as initUsers } from '../mock/mockData';
 
 const AuthContext = createContext(null);
 
+const EMAIL_DOMAIN = '@sunutrainingcenter.sn';
+
 export function AuthProvider({ children }) {
   const [users, setUsers] = useState(() => {
     try {
@@ -39,29 +41,64 @@ export function AuthProvider({ children }) {
     return true;
   };
 
-  const register = ({ nom, prenom, email, password, role, societe }) => {
+  // Build the platform email: prenom.nom@sunutrainingcenter.sn
+  const buildPlatformEmail = (prenom, nom, societe, role) => {
+    if (role === 'entreprise') {
+      const slug = (societe || 'entreprise')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '')
+        .slice(0, 20);
+      return slug + EMAIL_DOMAIN;
+    }
+    const p = (prenom || '').toLowerCase().replace(/[^a-z]/g, '');
+    const n = (nom || '').toLowerCase().replace(/[^a-z]/g, '');
+    return `${p}.${n}${EMAIL_DOMAIN}`;
+  };
+
+  const register = ({ nom, prenom, email, password, role, societe, telephone }) => {
     setRegisterError('');
     if (users.find(u => u.email === email)) {
-      setRegisterError('Cet email est deja utilise.');
+      setRegisterError('Cet email est déjà utilisé.');
       return false;
     }
+
+    const platformEmail = buildPlatformEmail(prenom, nom, societe, role);
+    let finalPlatformEmail = platformEmail;
+    let suffix = 1;
+    while (users.find(u => u.platformEmail === finalPlatformEmail)) {
+      const base = platformEmail.replace(EMAIL_DOMAIN, '');
+      finalPlatformEmail = `${base}${suffix}${EMAIL_DOMAIN}`;
+      suffix++;
+    }
+
+    // Use a small numeric ID for candidatId/entrepriseId so it can match data arrays
+    const numericId = Date.now() % 1000000; // keep it manageable
     const newId = 'u' + Date.now();
+    const displayName = role === 'entreprise' ? societe : (prenom + ' ' + nom);
     const newUser = {
-      id: newId, email, password, role,
-      nom: role === 'entreprise' ? societe : (prenom + ' ' + nom),
-      ...(role === 'candidat' ? { candidatId: Date.now() } : {}),
-      ...(role === 'entreprise' ? { entrepriseId: Date.now() } : {}),
+      id: newId,
+      email,
+      platformEmail: finalPlatformEmail,
+      password,
+      role,
+      nom: displayName,
+      telephone: telephone || '',
+      ...(role === 'candidat' ? { candidatId: numericId, prenom, nomFamille: nom } : {}),
+      ...(role === 'entreprise' ? { entrepriseId: numericId, societe } : {}),
     };
     setUsers(prev => [...prev, newUser]);
     const { password: _, ...safeUser } = newUser;
     setUser(safeUser);
-    return true;
+    return { user: safeUser, platformEmail: finalPlatformEmail, numericId };
   };
 
   const logout = () => { setUser(null); };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, loginError, setLoginError, registerError, setRegisterError }}>
+    <AuthContext.Provider value={{
+      user, login, logout, register, loginError, setLoginError,
+      registerError, setRegisterError, EMAIL_DOMAIN,
+    }}>
       {children}
     </AuthContext.Provider>
   );

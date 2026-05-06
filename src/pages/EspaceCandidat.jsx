@@ -91,7 +91,7 @@ function TestModal({ test, onClose, onSubmit }) {
 
 export default function EspaceCandidat() {
   const { user } = useAuth();
-  const { candidats, updateCandidatProfil, saveTestResult, testResults, accepterFormation, refuserFormation } = useData();
+  const { candidats, offres, messages, updateCandidatProfil, saveTestResult, testResults, accepterFormation, refuserFormation, postulerOffre, sendDirectMessage, envoyerMessageEntrepriseCandidatKey } = useData();
   const navigate = useNavigate();
 
   if (!user || user.role !== 'candidat') {
@@ -103,15 +103,16 @@ export default function EspaceCandidat() {
     );
   }
 
-  const candidat = candidats.find(c => c.id === user.candidatId);
+  const candidatRaw = candidats.find(c => c.id === user.candidatId);
   const [tab, setTab] = useState('profil');
   const [step, setStep] = useState(1);
-  const [profil, setProfil] = useState(candidat || {});
+  const [profil, setProfil] = useState(candidatRaw || { prenom: user.nom?.split(' ')[0] || '', nom: user.nom?.split(' ')[1] || '', email: user.email || '', telephone: user.telephone || '', formations: [], candidatures: [], secteurs: [], postes: [], outilsCRM: [], langues: [], typeContrat: [], dureeMission: [], mobilite: [], typesMissions: [] });
   const [testModal, setTestModal] = useState(null);
   const [saved, setSaved] = useState(false);
-  const [cvName, setCvName] = useState(candidat?.cvUploaded ? 'CV téléchargé ✓' : '');
+  const [cvName, setCvName] = useState(candidatRaw?.cvUploaded ? 'CV téléchargé ✓' : '');
 
-  if (!candidat) return <div style={{ padding: '100px 5%' }}>Candidat introuvable.</div>;
+  const candidat = candidatRaw || profil;
+
 
   const testsComplets = tests.filter(t => testResults[`${candidat.id}_${t.id}`] !== undefined).length;
   const progress = Math.round((
@@ -144,8 +145,8 @@ export default function EspaceCandidat() {
         </div>
       </div>
 
-      <div className="tabs">
-        {[['profil', '👤 Mon Profil'], ['formations', '🎓 Formations'], ['candidatures', '📋 Mes Candidatures']].map(([key, label]) => (
+      <div className="tabs" style={{ flexWrap: 'wrap' }}>
+        {[['profil', '👤 Mon Profil'], ['offres', '📋 Offres disponibles'], ['formations', '🎓 Formations'], ['candidatures', '📩 Mes Candidatures'], ['messages', '💬 Messages']].map(([key, label]) => (
           <button key={key} className={`tab-btn ${tab === key ? 'active' : ''}`} onClick={() => setTab(key)}>{label}</button>
         ))}
       </div>
@@ -292,6 +293,14 @@ export default function EspaceCandidat() {
         </div>
       )}
 
+      {tab === 'offres' && (
+        <OffresTab offres={offres} candidat={candidat} postulerOffre={postulerOffre} />
+      )}
+
+      {tab === 'messages' && (
+        <MessagesTab candidat={candidat} messages={messages} sendDirectMessage={sendDirectMessage} envoyerMessageEntrepriseCandidatKey={envoyerMessageEntrepriseCandidatKey} />
+      )}
+
       {tab === 'formations' && (
         <div>
           <div className="alert alert-info" style={{ marginBottom: 20 }}>
@@ -349,6 +358,125 @@ export default function EspaceCandidat() {
       )}
 
       {testModal && <TestModal test={testModal} onClose={() => setTestModal(null)} onSubmit={handleTestSubmit} />}
+    </div>
+  );
+}
+
+function OffresTab({ offres, candidat, postulerOffre }) {
+  const [filter, setFilter] = useState('');
+  const openOffres = offres.filter(o => o.statut === 'Ouverte' || o.statut === 'Publiée' || o.statut === 'En attente de validation');
+  const filtered = openOffres.filter(o => {
+    if (!filter) return true;
+    const q = filter.toLowerCase();
+    return o.titre?.toLowerCase().includes(q) || o.entreprise?.toLowerCase().includes(q) || o.secteur?.toLowerCase().includes(q);
+  });
+
+  const alreadyApplied = (offreId) => candidat.candidatures?.some(c => c.offreId === offreId);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 20 }}>
+        <input className="form-input" placeholder="🔍 Rechercher par titre, entreprise, secteur…"
+          value={filter} onChange={e => setFilter(e.target.value)} style={{ maxWidth: 400 }} />
+        <span style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>{filtered.length} offre{filtered.length !== 1 ? 's' : ''}</span>
+      </div>
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '48px', color: 'var(--muted)' }}>
+          Aucune offre disponible actuellement.
+        </div>
+      )}
+      <div style={{ display: 'grid', gap: 14 }}>
+        {filtered.map(o => {
+          const applied = alreadyApplied(o.id);
+          return (
+            <div key={o.id} style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 14, padding: '20px 24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--navy)', marginBottom: 4 }}>{o.titre}</div>
+                  <div style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>
+                    {o.entreprise && <span>🏢 {o.entreprise} · </span>}
+                    <span className="badge badge-blue">{o.typeMission}</span>
+                    {o.secteur && <span style={{ marginLeft: 6, fontSize: '0.78rem', color: 'var(--muted)' }}>{o.secteur}</span>}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--muted)' }}>{o.datePublication}</span>
+                  {applied ? (
+                    <span className="status-dot status-green">Candidature envoyée</span>
+                  ) : (
+                    <button className="btn btn-primary btn-sm" onClick={() => postulerOffre(o.id, candidat.id)}>
+                      Postuler →
+                    </button>
+                  )}
+                </div>
+              </div>
+              {o.description && (
+                <p style={{ marginTop: 10, fontSize: '0.83rem', color: '#555', lineHeight: 1.6 }}>{o.description}</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function MessagesTab({ candidat, messages, sendDirectMessage, envoyerMessageEntrepriseCandidatKey }) {
+  const [replyMsg, setReplyMsg] = useState({});
+
+  // Gather all message threads where this candidat is involved
+  const threads = Object.entries(messages)
+    .filter(([key]) => key.includes(`_cand_${candidat.id}`))
+    .map(([key, msgs]) => {
+      const entrepriseId = parseInt(key.replace('ent_', '').split('_cand_')[0]);
+      return { key, msgs, entrepriseId };
+    });
+
+  const sendReply = (key, entrepriseId) => {
+    const text = replyMsg[key];
+    if (!text?.trim()) return;
+    sendDirectMessage(entrepriseId, candidat.id, text, 'candidat');
+    setReplyMsg(prev => ({ ...prev, [key]: '' }));
+  };
+
+  if (threads.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '48px', color: 'var(--muted)' }}>
+        <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: 12 }}>💬</span>
+        Aucun message pour le moment. Les entreprises pourront vous contacter directement ici.
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 20 }}>
+      {threads.map(({ key, msgs }) => (
+        <div key={key} style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 14, padding: 20 }}>
+          <div style={{ fontWeight: 700, color: 'var(--navy)', marginBottom: 14, fontSize: '0.9rem' }}>
+            💬 Conversation avec une entreprise
+          </div>
+          <div style={{ maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 }}>
+            {msgs.map(m => (
+              <div key={m.id} style={{
+                alignSelf: m.from === 'candidat' ? 'flex-end' : 'flex-start',
+                background: m.from === 'candidat' ? 'var(--primary)' : '#f3f4f6',
+                color: m.from === 'candidat' ? '#fff' : 'var(--dark)',
+                padding: '8px 14px', borderRadius: 14, maxWidth: '75%', fontSize: '0.85rem',
+              }}>
+                {m.text}
+                <div style={{ fontSize: '0.7rem', opacity: 0.6, marginTop: 3, textAlign: 'right' }}>{m.date}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input className="form-input" placeholder="Répondre…"
+              value={replyMsg[key] || ''}
+              onChange={e => setReplyMsg(prev => ({ ...prev, [key]: e.target.value }))}
+              onKeyDown={e => e.key === 'Enter' && sendReply(key, parseInt(key.replace('ent_', '').split('_cand_')[0]))} />
+            <button className="btn btn-primary btn-sm" onClick={() => sendReply(key, parseInt(key.replace('ent_', '').split('_cand_')[0]))}>→</button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

@@ -1,6 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.jpeg';
+import logoISM from '../assets/logo-ism.png';
+import logoConcentrix from '../assets/logo-concentrix.png';
+import logoWave from '../assets/logo-wave.png';
+import logoIntelcia from '../assets/logo-intelcia.png';
+import logoBICIS from '../assets/logo-bicis.png';
+import logoOrange from '../assets/logo-orange.jpg';
 import styles from './Accueil.module.css';
+
+const PARTENAIRES = [
+  { nom: 'Orange Sénégal', logo: logoOrange, secteur: 'Télécoms', bg: '#fff' },
+  { nom: 'Concentrix', logo: logoConcentrix, secteur: 'BPO', bg: '#fff' },
+  { nom: 'Wave', logo: logoWave, secteur: 'Fintech', bg: '#00C3A0' },
+  { nom: 'Intelcia', logo: logoIntelcia, secteur: 'Call Center', bg: '#5B2D8E' },
+  { nom: 'ISM', logo: logoISM, secteur: 'Formation', bg: '#3D1A00' },
+  { nom: 'BICIS', logo: logoBICIS, secteur: 'Banque', bg: '#fff' },
+];
 
 const SERVICES = [
   { icon: '💼', titre: "L'Intérim Expert", desc: "Remplacement ou surcroît d'activité pour Team Leaders, Formateurs et experts GRC.", duree: '1 à 6 mois' },
@@ -252,6 +267,28 @@ export default function Accueil() {
                   <span className={styles.faqChevron}>{openFaq === i ? '▲' : '▼'}</span>
                 </button>
                 {openFaq === i && <div className={styles.faqA}>{item.r}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PARTENAIRES ===== */}
+      <section className={styles.partenairesSection}>
+        <div className={styles.sectionWrap}>
+          <div style={{ textAlign: 'center', marginBottom: 36 }}>
+            <span className={styles.sectionTag} style={{ display: 'inline-block' }}>Ils nous font confiance</span>
+            <h2 className={styles.sectionTitle}>Entreprises Partenaires</h2>
+            <p className={styles.sectionDesc}>Nous collaborons avec les leaders du secteur GRC au Sénégal et en Afrique de l'Ouest.</p>
+          </div>
+          <div className={styles.partenairesGrid}>
+            {PARTENAIRES.map(p => (
+              <div key={p.nom} className={styles.partenaireCard}>
+                <div className={styles.partenaireLogoBox} style={{ background: p.bg }}>
+                  <img src={p.logo} alt={p.nom} className={styles.partenaireLogoImg} />
+                </div>
+                <div className={styles.partenaireNom}>{p.nom}</div>
+                <div className={styles.partenaireSecteur}>{p.secteur}</div>
               </div>
             ))}
           </div>

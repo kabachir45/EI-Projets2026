@@ -4,17 +4,12 @@ import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.jpeg';
 import styles from './Connexion.module.css';
 
-const QUICK_LOGINS = [
-  { label: 'Candidat — Fatou', email: 'fatou@stc.sn', password: '1234', role: 'candidat', icon: '👤' },
-  { label: 'Entreprise — Orange', email: 'orange@stc.sn', password: '1234', role: 'entreprise', icon: '🏢' },
-  { label: 'Administrateur', email: 'admin@stc.sn', password: 'admin', role: 'admin', icon: '⚙️' },
-];
-
 export default function Connexion() {
   const { login, loginError, setLoginError } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPwd, setShowPwd] = useState(false);
 
   const doRedirect = (role) => {
     if (role === 'admin') navigate('/admin');
@@ -24,17 +19,12 @@ export default function Connexion() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoginError('');
     const ok = login(email, password);
     if (ok) {
       const stored = JSON.parse(localStorage.getItem('stc_user') || '{}');
       doRedirect(stored.role);
     }
-  };
-
-  const quickRedirect = (q) => {
-    setLoginError('');
-    const ok = login(q.email, q.password);
-    if (ok) doRedirect(q.role);
   };
 
   return (
@@ -64,30 +54,23 @@ export default function Connexion() {
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label">Adresse email</label>
               <input className="form-input" type="email" placeholder="votre@email.com"
-                value={email} onChange={e => setEmail(e.target.value)} required />
+                value={email} onChange={e => { setLoginError(''); setEmail(e.target.value); }} required autoComplete="email" />
             </div>
-            <div className="form-group">
+            <div className="form-group" style={{ position: 'relative' }}>
               <label className="form-label">Mot de passe</label>
-              <input className="form-input" type="password" placeholder="••••••••"
-                value={password} onChange={e => setPassword(e.target.value)} required />
+              <input className="form-input" type={showPwd ? 'text' : 'password'} placeholder="••••••••"
+                value={password} onChange={e => { setLoginError(''); setPassword(e.target.value); }} required autoComplete="current-password"
+                style={{ paddingRight: 44 }} />
+              <button type="button" onClick={() => setShowPwd(s => !s)}
+                style={{ position: 'absolute', right: 12, top: 34, background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', color: 'var(--muted)' }}>
+                {showPwd ? '🙈' : '👁️'}
+              </button>
             </div>
             {loginError && <div className="alert alert-danger">{loginError}</div>}
             <button type="submit" className={styles.submitBtn}>Se connecter →</button>
           </form>
-
-          <div className={styles.orRow}><span>ou accès rapide démo</span></div>
-
-          <div className={styles.quickList}>
-            {QUICK_LOGINS.map(q => (
-              <button key={q.email} className={styles.quickBtn} onClick={() => quickRedirect(q)}>
-                <span className={styles.quickIcon}>{q.icon}</span>
-                <span className={styles.quickLabel}>{q.label}</span>
-                <span className={styles.quickArrow}>→</span>
-              </button>
-            ))}
-          </div>
 
           <div className={styles.registerRow}>
             Pas encore de compte ?

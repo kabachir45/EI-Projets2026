@@ -16,7 +16,7 @@
   cursor: pointer; flex-shrink: 0; text-decoration: none;
 }
 .logo {
-  width: 48px; height: 48px; border-radius: 10px;
+  width: 44px; height: 44px; border-radius: 10px;
   object-fit: cover;
   border: 2px solid rgba(255,255,255,0.35);
   box-shadow: 0 4px 16px rgba(0,0,0,0.25);
@@ -81,21 +81,80 @@
 /* BURGER */
 .burger {
   display: none; flex-direction: column; gap: 5px;
-  background: none; border: none; cursor: pointer; padding: 4px; margin-left: auto;
+  background: none; border: none; cursor: pointer; padding: 4px; margin-left: auto; flex-shrink: 0;
 }
-.burger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; }
+
+/* Mobile-only elements — hidden on desktop */
+.mobileActions,
+.mobileUserRow,
+.mobileSpaceBtn,
+.mobileLoginBtn,
+.mobileRegisterBtn,
+.mobileLogoutBtn,
+.mobileUserName {
+  display: none;
+}
+.burger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; }
+.burgerOpen span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burgerOpen span:nth-child(2) { opacity: 0; }
+.burgerOpen span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 @media (max-width: 768px) {
   .links {
     position: fixed; top: 68px; left: 0; right: 0;
     background: #0013FF; flex-direction: column;
-    padding: 12px; gap: 4px; margin: 0;
+    padding: 0; gap: 0; margin: 0;
     transform: translateY(-110%); transition: transform 0.3s; display: flex;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 2px solid rgba(255,255,255,0.15);
+    box-shadow: 0 8px 24px rgba(0,0,19,0.35);
+    max-height: calc(100vh - 68px); overflow-y: auto;
   }
   .links.open { transform: translateY(0); }
-  .link { width: 100%; text-align: left; padding: 10px 14px; }
+  .link {
+    width: 100%; text-align: left; padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-radius: 0; font-size: 0.95rem;
+  }
+
+  /* Show mobile-only elements */
+  .mobileActions {
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .mobileUserRow {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .mobileUserName {
+    display: block; color: #fff; font-size: 0.9rem; font-weight: 600;
+  }
+  .mobileSpaceBtn {
+    display: block; width: 100%; text-align: left; padding: 14px 20px;
+    background: rgba(255,255,255,0.1); color: #fff;
+    border: none; border-bottom: 1px solid rgba(255,255,255,0.07);
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  }
+  .mobileLoginBtn {
+    display: block; width: 100%; padding: 12px; text-align: center;
+    background: transparent; color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.4); border-radius: 8px;
+    font-size: 0.9rem; font-weight: 500; cursor: pointer;
+  }
+  .mobileRegisterBtn {
+    display: block; width: 100%; padding: 12px; text-align: center;
+    background: #fff; color: #0013FF;
+    border: none; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  }
+  .mobileLogoutBtn {
+    display: block; width: 100%; padding: 12px; text-align: center;
+    background: rgba(255,50,50,0.25); color: #fff;
+    border: 1px solid rgba(255,100,100,0.3); border-radius: 8px;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  }
+
+  /* Hide desktop actions on mobile */
+  .actions { display: none; }
   .burger { display: flex; }
-  .userName, .spaceBtn { display: none; }
-  .loginBtn, .registerBtn { font-size: 0.75rem; padding: 6px 10px; }
+  .brandSub { display: none; }
 }

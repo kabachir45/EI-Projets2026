@@ -26,3 +26,21 @@
 .msgFooter { display: flex; gap: 10px; }
 .msgInput { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 0.88rem; outline: none; }
 .msgInput:focus { border-color: var(--primary); }
+
+/* CANDIDATS GRID (browse) */
+.candidatsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.candidatBrowseCard {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  transition: all 0.2s;
+}
+.candidatBrowseCard:hover {
+  border-color: #c7d0ff;
+  box-shadow: 0 4px 16px rgba(0,19,255,0.06);
+}
